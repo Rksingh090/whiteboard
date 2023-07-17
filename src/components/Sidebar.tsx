@@ -43,6 +43,9 @@ const ListItem = styled.li`
     &:hover{
         background-color: #fad7d7;
     }
+    &.active {
+        background-color: #fad7d7;
+    }
 `
 
 const BrushSlider = styled.input`
@@ -146,28 +149,28 @@ const Sidebar = () => {
     const [showSaveDialog, setShowDialog] = React.useState<boolean>(false);
     const [fileName, setFileName] = React.useState<string>("");
 
-    const { setColor, setSelectedTool, brushSize, setBrushSize, contextCtx, contextCanvas } = useCanvasOption();
+    const { setColor,selectedTool, setSelectedTool, brushSize, setBrushSize, contextCtx, contextCanvas } = useCanvasOption();
 
     return (
         <Nav className='sidebar'>
             <div className='sidebar_shapes'>
                 <h2 className='sidebarHeading withPad'>Shapes</h2>
                 <SidebarUL>
-                    <ListItem onClick={() => setSelectedTool("brush")}>
+                    <ListItem className={`${selectedTool === "brush" ? "active" : ""}`} onClick={() => setSelectedTool("brush")}>
                         <PiWaveSineLight size={18} />
                         <span>Draw</span>
                     </ListItem>
-                    <ListItem onClick={() => setSelectedTool("rectangle")}>
+                    <ListItem className={`${selectedTool === "rectangle" ? "active" : ""}`} onClick={() => setSelectedTool("rectangle")}>
                         <BiRectangle size={18} />
                         <span>Rectangle</span>
                     </ListItem>
-                    <ListItem onClick={() => setSelectedTool("triangle")}>
-                        <IoTriangleOutline size={18} />
-                        <span>Triangle</span>
-                    </ListItem>
-                    <ListItem onClick={() => setSelectedTool("circle")}>
+                    <ListItem className={`${selectedTool === "circle" ? "active" : ""}`} onClick={() => setSelectedTool("circle")}>
                         <BsCircle size={18} />
                         <span>Circle</span>
+                    </ListItem>
+                    <ListItem className={`${selectedTool === "triangle" ? "active" : ""}`} onClick={() => setSelectedTool("triangle")}>
+                        <IoTriangleOutline size={18} />
+                        <span>Triangle</span>
                     </ListItem>
                 </SidebarUL>
             </div>

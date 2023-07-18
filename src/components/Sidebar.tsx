@@ -8,6 +8,7 @@ import { PiWaveSineLight } from 'react-icons/pi'
 import { BiRectangle } from 'react-icons/bi'
 import { IoTriangleOutline } from 'react-icons/io5'
 import { BsCircle } from 'react-icons/bs'
+import { CiUndo, CiRedo } from 'react-icons/ci';
 
 const Nav = styled.div`
     background-color: white;
@@ -21,9 +22,8 @@ const Nav = styled.div`
     flex-direction: column;
     align-items: flex-start;
     gap: 15px;
-    padding: 10px 0;
+    padding: 5px 0;
 `
-
 const SidebarUL = styled.ul`
     display: flex;
     flex-direction: column;
@@ -36,9 +36,9 @@ const ListItem = styled.li`
     align-items: center;
     gap: 10px;
     width: 100%;
-    padding: 8px 10px;
+    padding: 5px 10px;
     transition: all .16s ease-in;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
     &:hover{
         background-color: #fad7d7;
@@ -47,7 +47,6 @@ const ListItem = styled.li`
         background-color: #fad7d7;
     }
 `
-
 const BrushSlider = styled.input`
     width: 100%;
     align-self: center;
@@ -124,7 +123,6 @@ const CustomFileInput = styled.input`
     outline: none;
 `
 
-
 const Sidebar = () => {
 
     const colorPallet = React.useMemo(() => [
@@ -149,7 +147,11 @@ const Sidebar = () => {
     const [showSaveDialog, setShowDialog] = React.useState<boolean>(false);
     const [fileName, setFileName] = React.useState<string>("");
 
-    const { setColor,selectedTool, setSelectedTool, brushSize, setBrushSize, contextCtx, contextCanvas } = useCanvasOption();
+    const {
+        setColor, selectedTool, setSelectedTool, undoCanvas,
+        brushSize, setBrushSize, clearCanvas,redoCanvas, contextCanvas,
+        filled, setFilled
+    } = useCanvasOption();
 
     return (
         <Nav className='sidebar'>
@@ -172,6 +174,11 @@ const Sidebar = () => {
                         <IoTriangleOutline size={18} />
                         <span>Triangle</span>
                     </ListItem>
+
+                    <p>
+                        <span>Fill: </span>
+                        <input type="checkbox" value={filled} onChange={(e) => setFilled((prev:boolean) => !prev)} />
+                    </p>
                 </SidebarUL>
             </div>
 
@@ -203,28 +210,42 @@ const Sidebar = () => {
                 </div>
             </div>
 
-            <div className="CanvasActions">
-                <dialog open={showSaveDialog} id='filedialog'>
-                    <CustomFileInput placeholder='File Name' onChange={(e) => setFileName(e.target.value)} value={fileName} />
 
-                    <div className='fileSaveActions'>
-                        <button className='cancle'
-                            onClick={() => setShowDialog(false)}
-                        >Cancle</button>
-                        <button className='save' onClick={() => {
-                            let image = contextCanvas.current?.toDataURL("image/png");
-                            var link = document.createElement('a');
-                            link.download = fileName + '.png';
-                            link.href = image
-                            link.click();
-                            setShowDialog(false);
-                        }}>Save</button>
-                    </div>
-                </dialog>
-                <button className='clear' onClick={() => contextCtx.clearRect(0, 0, contextCanvas.current?.width, contextCanvas.current?.height)}>Clear Board</button>
-                <button className='saveImage'
-                    onClick={() => setShowDialog(true)}
-                >Save Image</button>
+            <div className='sidebarEnd'>
+                <div className='historyBtns'>
+                    <button className="undo" onClick={undoCanvas}>
+                        <CiUndo size={18} />
+                        <span>Undo</span>
+                    </button>
+                    <button className="redo" onClick={redoCanvas}>
+                        <CiRedo size={18} />
+                        <span>Redo</span>
+                    </button>
+                </div>
+                <div className="CanvasActions">
+
+                    <dialog open={showSaveDialog} id='filedialog'>
+                        <CustomFileInput placeholder='File Name' onChange={(e) => setFileName(e.target.value)} value={fileName} />
+
+                        <div className='fileSaveActions'>
+                            <button className='cancle'
+                                onClick={() => setShowDialog(false)}
+                            >Cancle</button>
+                            <button className='save' onClick={() => {
+                                let image = contextCanvas.current?.toDataURL("image/png");
+                                var link = document.createElement('a');
+                                link.download = fileName + '.png';
+                                link.href = image
+                                link.click();
+                                setShowDialog(false);
+                            }}>Save</button>
+                        </div>
+                    </dialog>
+                    <button className='clear' onClick={clearCanvas}>Clear Board</button>
+                    <button className='saveImage'
+                        onClick={() => setShowDialog(true)}
+                    >Save Image</button>
+                </div>
             </div>
         </Nav >
     )

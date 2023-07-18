@@ -11,8 +11,8 @@ const HomeLayout = styled.main`
     overflow: hidden;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0,5fr);
-    gap: 20px;
-    padding: 20px;
+    gap: 10px;
+    padding: 10px;
 `
 
 

@@ -101,6 +101,15 @@ const BrushSlider = styled.input`
         background-color: #9a905d;
     }
 `
+const FillP = styled.p`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    padding: 0 10px;
+    font-size: 14px;
+    font-weight: 500;
+`
 interface ColorItemType {
     bg?: string,
     outline?: string
@@ -175,13 +184,13 @@ const Sidebar = () => {
                         <span>Triangle</span>
                     </ListItem>
 
-                    <p>
-                        <span>Fill: </span>
-                        <input type="checkbox" value={filled} onChange={(e) => setFilled((prev:boolean) => !prev)} />
-                    </p>
                 </SidebarUL>
             </div>
 
+                    <FillP>
+                        <span>Fill: </span>
+                        <input type="checkbox" className='fillCheck' value={filled} onChange={(e) => setFilled((prev:boolean) => !prev)} />
+                    </FillP>
 
             <div className="sidebarSlider">
                 <h2 className='sidebarHeading'>Brush Size ({brushSize})</h2>
